@@ -1,27 +1,18 @@
-#include "mainwindow.h"
-#include <QApplication>
-#include <QMessageBox>
-#include "connection.h"
-#include<QTranslator>
-#include<QInputDialog>
+#include <QCoreApplication>
+#include"chatserver.h"
+
+using namespace ApexAlliance;
+
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    QTranslator t;
-        QStringList languages;
-        languages <<"French" << "English" ;
-        QString lang = QInputDialog::getItem(NULL, "Select Language", "Language",languages);
-        if ( lang == "English")
-        {
-            t.load(":/anglais.qm");
-        }
-        if (lang != "French")
-        {
-            a.installTranslator(&t);
-        }
-    Connection c;
-    bool test=c.createconnect();
-    w.show();
+    QCoreApplication a(argc, argv);
+    ChatServer Server;
+    if(!Server.startServer(3333)){
+        qDebug()<<"Error:"<<Server.errorString();
+        return 1;
+
+    }
+    qDebug()<<"Server   started ...";
+
     return a.exec();
 }
